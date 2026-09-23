@@ -1,36 +1,44 @@
 ### auth_lab.http — Authentication Gauntlet Lab
-### Write your REST Client request blocks under each phase header.
 ### Run a block with Ctrl+Alt+R (Windows/Linux) or Cmd+Alt+R (macOS).
-### Hint: all endpoints live under http://127.0.0.1:8000/api/
+### All endpoints live under http://127.0.0.1:8000/api/
 ### ─────────────────────────────────────────────────────────────────────────
 
 
 ### ═══════════════════════════════════════════════════════════════════════════
 ### PHASE 1 — Basic Authentication
 ### ═══════════════════════════════════════════════════════════════════════════
-# TODO: Find the Basic Auth endpoint in api/urls.py.
-# TODO: Write a GET request that sends credentials using the
-#       Authorization: Basic <base64(username:password)> header.
-#       Tip: REST Client supports  Authorization: Basic admin admin123  directly.
+
+### Phase 1 — Basic Auth (unauthenticated — should return 401)
+GET http://127.0.0.1:8000/api/basic/ HTTP/1.1
+
+###
+
+### Phase 1 — Basic Auth (with credentials — admin:admin123 in Base64)
+# REST Client sends the raw Authorization header exactly as written below.
+# YWRtaW46YWRtaW4xMjM= is Base64("admin:admin123")
+# Check your terminal after sending — the server prints the raw header.
+GET http://127.0.0.1:8000/api/basic/ HTTP/1.1
+Authorization: Basic YWRtaW46YWRtaW4xMjM=
+
+###
+
+### Phase 1 — Synthesis: Replay Attack (no password needed)
+# An attacker captured this exact header off the network (plain HTTP = no TLS).
+# They do NOT need to decode it — they simply copy and replay the same header.
+# This works because Base64 is reversible ENCODING, not ENCRYPTION.
+# The server cannot tell this apart from the real client's request.
+# Lesson: Base64 provides ZERO security — TLS (HTTPS) is the only real shield.
+GET http://127.0.0.1:8000/api/basic/ HTTP/1.1
+Authorization: Basic YWRtaW46YWRtaW4xMjM=
 
 
 ### ═══════════════════════════════════════════════════════════════════════════
 ### PHASE 3 — Token Authentication (Opaque)
 ### ═══════════════════════════════════════════════════════════════════════════
-# TODO: Generate a DRF token for the admin user first (see lab README).
-# TODO: Find the Token Auth endpoint in api/urls.py.
-# TODO: Write a GET request that sends the token using the
-#       Authorization: Token <your-token> header.
+# TODO (Timothee): see PUSH_GUIDE.md for the exact request blocks to paste here.
 
 
 ### ═══════════════════════════════════════════════════════════════════════════
 ### PHASE 4 — JSON Web Tokens (JWT)
 ### ═══════════════════════════════════════════════════════════════════════════
-# TODO: Find the JWT login endpoint in api/urls.py.
-# TODO: Write a POST request with a JSON body containing username and password.
-# After sending, copy the "access" value from the response and paste it below:
-#   @accessToken = <paste the access token here>
-# TODO: Write a GET request to the protected JWT endpoint using:
-#       Authorization: Bearer {{accessToken}}
-# TODO: (Bonus) Write a POST request to refresh the access token using
-#       the refresh token from the login response.
+# TODO (Victor): see PUSH_GUIDE.md for the exact request blocks to paste here.
