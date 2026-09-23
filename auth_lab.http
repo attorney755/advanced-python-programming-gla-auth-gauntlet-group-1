@@ -35,7 +35,10 @@ Authorization: Basic YWRtaW46YWRtaW4xMjM=
 ### ═══════════════════════════════════════════════════════════════════════════
 ### PHASE 3 — Token Authentication (Opaque)
 ### ═══════════════════════════════════════════════════════════════════════════
-# TODO (Timothee): see PUSH_GUIDE.md for the exact request blocks to paste here.
+### Phase 3 — Opaque Token Auth (valid token — should return 200)
+# Token was generated with: python manage.py drf_create_token admin
+GET http://127.0.0.1:8000/api/token/ HTTP/1.1
+Authorization: Token e5a49e294f433ee80400911c01307a8493fec1f4
 
 
 ### ═══════════════════════════════════════════════════════════════════════════

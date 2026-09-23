@@ -84,9 +84,24 @@ def session_auth_view(request):
 @permission_classes([IsAuthenticated])
 def token_auth_view(request):
     # Reporter — Phase 3 challenge answers:
+    #
     # Q1 answer (HTTP status code for a tampered token):
+    #   401 Unauthorized — the server looks the token up in its authtoken_token table,
+    #   finds no match, and rejects the request.
+    #
     # Q2 answer (password hashing algorithm):
+    #   The output starts with the prefix  pbkdf2_sha256  which means Django uses
+    #   PBKDF2 with the SHA-256 hash function and a random salt to store passwords.
+    #   admin123 is never stored as-is because storing plain-text passwords would
+    #   expose every user's credentials if the database were ever compromised.
+    #
     # Synthesis answer (token revocation — opaque vs JWT):
+    #   To permanently invalidate a stolen opaque token, an administrator (or an
+    #   automated process) must delete that specific row from the authtoken_token
+    #   table; the token owner cannot revoke it themselves without a dedicated API.
+    #   A JWT cannot be revoked the same way because it is never stored in a
+    #   database — the only levers are a very short expiry time or maintaining a
+    #   server-side deny-list of revoked token IDs (which re-introduces statefulness).
 
     return Response({"message": "Token authenticated.", "user": request.user.username})
 
