@@ -85,7 +85,7 @@ def session_auth_view(request):
     #   This is called session hijacking: an attacker who sniffs or steals the
     #   sessionid (e.g. via XSS, network interception, or a compromised device)
     #   can place it in their own browser and gain full access to the victim's
-    #   account for as long as that server-side session record remains valid.
+    #  account for as long as that server-side session record remains valid.
 
     return Response({"message": "Session authenticated.", "user": request.user.username})
 
