@@ -69,8 +69,23 @@ def basic_auth_view(request):
 @permission_classes([IsAuthenticated])
 def session_auth_view(request):
     # Reporter — Phase 2 challenge answers:
+    #
     # Q1 answer (effect of deleting the sessionid cookie):
-    # Synthesis answer (how session hijacking works):
+    #   Deleting the cookie immediately logs you out and redirects to the login page.
+    #   This happens because the cookie is a pointer to a session record stored in
+    #   the server's database (django_session table). Without the cookie the browser
+    #   has no way to identify itself to the server, and the server therefore treats
+    #   the request as unauthenticated — even though the session record still exists
+    #   in the database.
+    #
+    # Synthesis answer (session hijacking):
+    #   Re-adding the original sessionid value immediately restores the logged-in
+    #   session, proving that anyone who possesses the sessionid cookie value can
+    #   impersonate the user without ever knowing their password.
+    #   This is called session hijacking: an attacker who sniffs or steals the
+    #   sessionid (e.g. via XSS, network interception, or a compromised device)
+    #   can place it in their own browser and gain full access to the victim's
+    #   account for as long as that server-side session record remains valid.
 
     return Response({"message": "Session authenticated.", "user": request.user.username})
 
